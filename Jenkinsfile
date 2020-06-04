@@ -109,11 +109,12 @@ pipeline {
 }
 
 void publishInECS(String customLocalImage) {
+    echo "${customLocalImage}"
     ECS_REGISTRY="572508813856.dkr.ecr.us-east-1.amazonaws.com"
     ECR_REPO="jenkins-test-repo"
     sh '''
         token=$(aws ecr get-login-password --region us-east-1)
-        docker login --username AWS --password ${token} ${ECS_REGISTRY}
+        docker login --username AWS --password $token 572508813856.dkr.ecr.us-east-1.amazonaws.com
     '''
     sh """
         docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:0.0.${BUILD_NUMBER}
