@@ -114,9 +114,7 @@ void publishInECS(String customLocalImage) {
     ECS_REGISTRY="572508813856.dkr.ecr.us-east-1.amazonaws.com"
     ECR_REPO="jenkins-test-repo"
     
-    dir ('./') { 
-        sh('aws-ecs-deploy.sh')
-    }
+    sh 'bash ./aws-ecs-deploy.sh'
 
     sh """
         docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:0.0.${BUILD_NUMBER}
