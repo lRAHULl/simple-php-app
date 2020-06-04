@@ -109,12 +109,14 @@ pipeline {
 }
 
 void publishInECS() {
+    ECS_REGISTRY="572508813856.dkr.ecr.us-east-1.amazonaws.com"
+    ECR_REPO="jenkins-test-repo"
     sh """
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECS_REGISTRY}
-        docker tag ${customLocalImage} ${ECS_REGISTRY}/jenkins-test-repo:${BUILD_NUMBER} apache/
-        docker tag ${customLocalImage} ${ECS_REGISTRY}/jenkins-test-repo:latest apache/
-        echo "${ECS_REGISTRY}/jenkins-test-repo"
-        docker push ${ECS_REGISTRY}/jenkins-test-repo
+        docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:${BUILD_NUMBER} apache/
+        docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:latest apache/
+        echo "${ECS_REGISTRY}/${ECR_REPO}"
+        docker push ${ECS_REGISTRY}/${ECR_REPO}
     """
 }
 
