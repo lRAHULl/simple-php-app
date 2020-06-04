@@ -2,7 +2,7 @@ version: '3.5'
 
 services: 
     web-service:
-        build: ./apache/
+        image: rahulraju/simple-php-app:latest
         container_name: lamp-web
         volumes: 
             - web-data:/var/lib/apache2/
@@ -13,7 +13,7 @@ services:
             - mysql
     
     mysql:
-        build: ./mysql/
+        image: rahulraju/simple-php-app:mysql
         container_name: lamp-mysql
         environment: 
             - MYSQL_ROOT_PASSWORD=root
