@@ -75,11 +75,22 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                publishInECS "${customLocalImage}"
 
                 script {
                     if (gitBranch == 'master'){
                         echo "Master "
+
+                        ECS_REGISTRY="572508813856.dkr.ecr.us-east-1.amazonaws.com"
+                        ECR_REPO="jenkins-test-repo"
+                        
+                        // sh 'bash ./aws-ecs-deploy.sh'
+
+                        sh """
+                            docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:0.0.${BUILD_NUMBER}
+                            docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:latest
+                            echo "${ECS_REGISTRY}/${ECR_REPO}"
+                            docker push ${ECS_REGISTRY}/${ECR_REPO}
+                        """
                         // sh "docker stop lamp-web || true"
                         // sh "docker rm lamp-web || true"
                         // sh "docker stop lamp-mysql || true"
@@ -109,20 +120,10 @@ pipeline {
     }
 }
 
-void publishInECS(String customLocalImage) {
-    echo "${customLocalImage}"
-    ECS_REGISTRY="572508813856.dkr.ecr.us-east-1.amazonaws.com"
-    ECR_REPO="jenkins-test-repo"
+// void publishInECS(String customLocalImage) {
+//     // echo "${customLocalImage}"
     
-    // sh 'bash ./aws-ecs-deploy.sh'
-
-    sh """
-        docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:0.0.${BUILD_NUMBER}
-        docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:latest
-        echo "${ECS_REGISTRY}/${ECR_REPO}"
-        docker push ${ECS_REGISTRY}/${ECR_REPO}
-    """
-}
+// }
 
 void deployToECS() {
     sh '''
