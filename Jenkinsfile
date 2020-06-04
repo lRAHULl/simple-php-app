@@ -78,7 +78,7 @@ pipeline {
                 publishInECS()
                 script {
                     if (gitBranch == 'master'){
-                        echo "Master"
+                        echo "Master "
                         // sh "docker stop lamp-web || true"
                         // sh "docker rm lamp-web || true"
                         // sh "docker stop lamp-mysql || true"
