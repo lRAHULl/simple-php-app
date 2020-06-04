@@ -75,7 +75,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                publishInECS()
+                publishInECS customLocalImage
                 script {
                     if (gitBranch == 'master'){
                         echo "Master "
@@ -108,7 +108,7 @@ pipeline {
     }
 }
 
-void publishInECS() {
+void publishInECS(String customLocalImage) {
     ECS_REGISTRY="572508813856.dkr.ecr.us-east-1.amazonaws.com"
     ECR_REPO="jenkins-test-repo"
     sh """
