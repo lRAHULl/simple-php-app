@@ -113,8 +113,8 @@ void publishInECS(String customLocalImage) {
     ECR_REPO="jenkins-test-repo"
     sh """
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECS_REGISTRY}
-        docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:${BUILD_NUMBER} apache/
-        docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:latest apache/
+        docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:0.0.${BUILD_NUMBER}
+        docker tag ${customLocalImage} ${ECS_REGISTRY}/${ECR_REPO}:latest
         echo "${ECS_REGISTRY}/${ECR_REPO}"
         docker push ${ECS_REGISTRY}/${ECR_REPO}
     """
