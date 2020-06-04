@@ -2,10 +2,10 @@
 def dockerPublisherName = "rahulraju"
 def dockerRepoName = "simple-php-app"
 
-// def gitRepoName = "https://github.com/lRAHULl/simple-php-app.git"
+def gitRepoName = "https://github.com/lRAHULl/simple-php-app.git"
 def customLocalImage = "sample-php-app-image"
 
-def gitBranch = getBranchName "${GIT_BRANCH}"
+def gitBranch
 
 properties([pipelineTriggers([githubPush()])])
 pipeline {
@@ -16,11 +16,14 @@ pipeline {
     }
 
     stages {
-        // stage('Checkout') {
-        //     steps {
-        //         git branch: "${gitBranch}", url: "${gitRepoName}"
-        //     }
-        // }
+        stage('Checkout') {
+            steps {
+                sh "printenv"
+                git branch: "**", url: "${gitRepoName}"
+                gitBranch=getBranchName "${GIT_BRANCH}"
+                sh "printenv"
+            }
+        }
 
 
         stage('Build') {
