@@ -18,19 +18,17 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                sh "printenv"
+                echo "CHECKING OUT BRANCH   ------  ${gitBranch}"
                 git branch: "**", url: "${gitRepoName}"
                 script {
                     gitBranch=getBranchName "${GIT_BRANCH}"
                 }
-                sh "printenv"
             }
         }
 
 
         stage('Build') {
             steps {
-                echo "${gitBranch}"
                 script {
                     if (gitBranch == 'master' || gitBranch == 'develop'){
                         // sh './gradlew bootjar'

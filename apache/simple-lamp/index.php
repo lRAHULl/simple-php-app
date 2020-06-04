@@ -141,7 +141,7 @@ function open_memcache_connection($hostname)
 echo "<html>";
 echo "<head>";
 echo "<META http-equiv='Content-Type' content='text/html; charset=UTF-8'>";
-echo "<title>Scalable Web Application</title>";
+echo "<title>UnScalable Web Application</title>";
 echo "<script src='demo.js'></script>";
 echo "</head>";
 echo "<body>";
