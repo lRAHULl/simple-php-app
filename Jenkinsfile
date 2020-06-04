@@ -76,6 +76,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 publishInECS customLocalImage
+                
                 script {
                     if (gitBranch == 'master'){
                         echo "Master "
