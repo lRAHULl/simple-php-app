@@ -20,7 +20,9 @@ pipeline {
             steps {
                 sh "printenv"
                 git branch: "**", url: "${gitRepoName}"
-                gitBranch=getBranchName "${GIT_BRANCH}"
+                script {
+                    gitBranch=getBranchName "${GIT_BRANCH}"
+                }
                 sh "printenv"
             }
         }
