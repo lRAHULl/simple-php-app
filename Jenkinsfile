@@ -31,7 +31,6 @@ pipeline {
             steps {
                 script {
                     if (gitBranch == 'master' || gitBranch == 'develop'){
-                        // sh './gradlew bootjar'
                         sh "docker rmi ${customLocalImage} || true"
                         sh "docker build -t ${customLocalImage} apache/"
                         sendSlackMessage "Build Successul"
@@ -57,7 +56,7 @@ pipeline {
             }
         }
         
-        stage('Deploy') {
+        stage('Stage') {
             steps {
                 script {
                     if (gitBranch == 'master' || gitBranch == 'develop'){
@@ -67,6 +66,25 @@ pipeline {
                         sh "docker rm lamp-mysql || true"
                         
                         sh "docker-compose up -d"
+                    } else if (gitBranch.contains('feature')) {
+                        echo "It is a feature branch"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                publishInECS()
+                script {
+                    if (gitBranch == 'master'){
+                        echo "Master"
+                        // sh "docker stop lamp-web || true"
+                        // sh "docker rm lamp-web || true"
+                        // sh "docker stop lamp-mysql || true"
+                        // sh "docker rm lamp-mysql || true"
+                        
+                        // sh "docker-compose up -d"
                     } else if (gitBranch.contains('feature')) {
                         echo "It is a feature branch"
                     }
@@ -88,6 +106,16 @@ pipeline {
         }
 
     }
+}
+
+void publishInECS() {
+    sh """
+        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECS_REGISTRY}
+        docker tag ${customLocalImage} ${ECS_REGISTRY}/jenkins-test-repo:${BUILD_NUMBER} apache/
+        docker tag ${customLocalImage} ${ECS_REGISTRY}/jenkins-test-repo:latest apache/
+        echo "${ECS_REGISTRY}/jenkins-test-repo"
+        docker push ${ECS_REGISTRY}/jenkins-test-repo
+    """
 }
 
 String getBranchName(String inputString) {
