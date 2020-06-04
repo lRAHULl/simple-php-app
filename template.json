@@ -1,0 +1,21 @@
+{
+    "family": "example_task_2",
+    "containerDefinitions": [
+      {
+        "memory": 32,
+        "essential": true,
+        "entryPoint": [
+          "ping"
+        ],
+        "name": "alpine_ping",
+        "readonlyRootFilesystem": true,
+        "image": "alpine:3.4",
+        "command": [
+          "-c",
+          "4",
+          "google.com"
+        ],
+        "cpu": 16
+      }
+    ]
+  }
